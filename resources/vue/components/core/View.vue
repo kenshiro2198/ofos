@@ -1,5 +1,5 @@
 <template>
-    <v-main>
+    <v-main class="background pt-15">
         <router-view></router-view>
     </v-main>
 </template>

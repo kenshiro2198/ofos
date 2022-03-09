@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="//cdn.materialdesignicons.com/6.5.95/css/materialdesignicons.min.css">
-    <!-- <link rel="stylesheet" href="{{ mix('css/app.css') }}"> -->
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
     <title>G-District</title>
 </head>

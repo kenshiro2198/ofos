@@ -11,4 +11,9 @@ class Category extends Model
     protected $casts = [
         'is_deleted' => 'boolean',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'category_id');
+    }
 }

@@ -39,19 +39,20 @@
                     <v-row align="center" justify="center">
                         <v-col align-self="align" cols="9">
                             <v-card color="background" elevation="0">
-                                <v-container>
+                                <v-data-iterator
+                                    hide-default-footer
+                                    :items="items"
+                                >
                                     <v-row>
                                         <template v-if="loadingItems">
                                             <v-col
-                                                cols="12"
-                                                sm="6"
-                                                xl="4"
+                                                cols="2"
                                                 v-for="index in 6"
                                                 :key="index"
                                             >
                                                 <v-skeleton-loader
                                                     class="mx-auto"
-                                                    max-width="300"
+                                                    max-width="200"
                                                     type="card"
                                                 ></v-skeleton-loader>
                                             </v-col>
@@ -60,46 +61,41 @@
                                             <v-col
                                                 v-for="(item, index) in items"
                                                 :key="index"
-                                                cols="12"
-                                                sm="6"
-                                                xl="4"
+                                                cols="2"
                                             >
                                                 <v-card
                                                     height="100%"
-                                                    max-width="300"
+                                                    width="200"
                                                     @click="addToCart(item)"
                                                 >
-                                                    <v-img
-                                                        max-height="200"
-                                                        :src="
-                                                            '/img/' + item.image
-                                                        "
-                                                        contain
-                                                    ></v-img>
-                                                    <div
-                                                        class="d-flex flex-no-wrap justify-space-between"
-                                                    >
-                                                        <div>
-                                                            <v-card-title
-                                                                v-text="
-                                                                    item.name
-                                                                "
-                                                            ></v-card-title>
-
-                                                            <v-card-subtitle
-                                                                class="text-left font-weight-bold title"
-                                                                >PHP
-                                                                {{
-                                                                    item.price
-                                                                }}</v-card-subtitle
-                                                            >
+                                                    <v-card-text>
+                                                        <v-img
+                                                            max-height="100"
+                                                            :src="
+                                                                '/img/' +
+                                                                item.image
+                                                            "
+                                                        ></v-img>
+                                                    </v-card-text>
+                                                    <v-card-text>
+                                                        <div class="text-left">
+                                                            {{ item.name }}
                                                         </div>
-                                                    </div>
+                                                    </v-card-text>
+                                                    <v-divider></v-divider>
+                                                    <v-card-text>
+                                                        <div
+                                                            class="text-left font-weight-bold title"
+                                                        >
+                                                            PHP
+                                                            {{ item.price }}
+                                                        </div>
+                                                    </v-card-text>
                                                 </v-card>
                                             </v-col>
                                         </template>
                                     </v-row>
-                                </v-container>
+                                </v-data-iterator>
                             </v-card>
                             <div class="text-center mt-4">
                                 <v-pagination
@@ -144,7 +140,7 @@ export default {
             vm.loadingItems = true;
             setTimeout(async () => {
                 const { data } = await axios.get(
-                    `/items?page=${vm.page}&itemsPerPage=6&mustSort=false&multiSort=false`
+                    `/guest/items?page=${vm.page}&itemsPerPage=6&mustSort=false&multiSort=false`
                 );
                 vm.items = data.data;
                 vm.length = data.last_page;
@@ -179,6 +175,10 @@ export default {
             }
             cart.push(value);
             vm.$ls.set("cart", cart);
+            if (vm.$ls.get("cart")) {
+                cart = vm.$ls.get("cart");
+                vm.setCart(cart.length);
+            }
             vm.update = false;
             vm.addToCartDialog = false;
             vm.selectedItem = {};

@@ -6,6 +6,7 @@ export default {
     filter: false,
     user: null,
     loading: false,
+    cart: 0,
     navigation_items: [{
             title: "Borrowers",
             icon: "mdi-account-outline",

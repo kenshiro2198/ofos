@@ -88,6 +88,7 @@ export default {
             let vm = this;
             vm.form = {
                 id: vm.value.id,
+                name: vm.value.name,
                 image: vm.value.image,
                 price: vm.value.price,
                 qty: vm.qty,

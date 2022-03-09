@@ -66,4 +66,10 @@ class CategoryController extends Controller
     {
         //
     }
+    public function items(Request $request)
+    {
+        $query = Category::with('items');
+        return $query->get();
+    }
+
 }

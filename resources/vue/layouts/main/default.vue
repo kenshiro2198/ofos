@@ -1,8 +1,9 @@
 <template>
-    <v-content>
+    <v-main>
         <core-header />
-        <!-- <core-navigation v-if="!$me.theme_navigation_variant" /> -->
         <core-view />
+
+        <core-cart />
         <core-footer />
-    </v-content>
+    </v-main>
 </template>

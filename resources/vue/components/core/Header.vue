@@ -1,114 +1,111 @@
 <template>
-    <section>
-        <v-toolbar dense color="primary" height="70">
-            <v-img
-                @click="$router.push('/')"
-                src="/img/logo_transparent.png"
-                max-height="100"
-                max-width="50"
-            >
-            </v-img>
-            <v-text-field
-                class="ml-7"
-                hide-details
-                solo
-                placeholder="Search for your favorite food"
-                prepend-inner-icon="mdi-magnify"
-            ></v-text-field>
-            <v-spacer></v-spacer>
+    <v-app-bar
+        dense
+        color="primary"
+        height="70"
+        elevation="4"
+        style="position: fixed; z-index: 999"
+    >
+        <v-img
+            @click="$router.push('/')"
+            src="/img/logo_transparent.png"
+            max-height="100"
+            max-width="50"
+        >
+        </v-img>
+        <v-text-field
+            class="ml-7"
+            hide-details
+            solo
+            v-model="search"
+            placeholder="Search for your favorite food"
+            prepend-inner-icon="mdi-magnify"
+        ></v-text-field>
+        <v-spacer></v-spacer>
 
-            <div class="ml-8 secondary--text">
-                <v-btn color="secondary" text plain class="overline">Menu</v-btn>
-                <v-btn color="secondary" text plain class="overline">Orders</v-btn>
-                <v-btn color="secondary" text plain class="overline">LOGIN</v-btn>
-                |
-                <v-btn color="secondary" text plain class="overline">REGISTER</v-btn>
-            </div>
-        </v-toolbar>
-        <!-- <v-toolbar color="white" elevation="0">
+        <div class="ml-8 secondary--text">
             <v-btn
+                color="secondary"
                 text
-                color="primary"
-                class="ml-16"
-                @click="$router.push('/')"
+                plain
+                class="overline"
+                @click="$router.push('/menu')"
             >
-                <div class="text">G-DISTRICT</div>
+                Menu
             </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-                color="primary"
-                text
-                class="ml-16"
-                @click="$router.push('/')"
-            >
-                <div class="text font-weight-medium">Home</div>
+            <v-btn color="secondary" text plain class="overline">
+                Orders
             </v-btn>
-            <v-divider vertical class="ml-8" inset></v-divider>
-            <v-menu offset-y open-on-hover>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        color="primary"
-                        text
-                        class="ml-16"
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <div class="text font-weight-medium">Food Menu</div>
-                    </v-btn>
-                </template>
-                <v-list>
-                    <v-list-item
-                        v-for="(item, index) in items"
-                        :key="index"
-                        link
-                    >
-                        <v-list-item-title to="/">{{
-                            item.name
-                        }}</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-            <v-divider vertical class="ml-8" inset></v-divider>
-            <v-btn
-                color="primary"
-                text
-                class="ml-16"
-                @click="$router.push('/track-order')"
-            >
-                <div class="text font-weight-medium">Track Order</div>
+            <v-btn color="secondary" text plain class="overline"> LOGIN </v-btn>
+            |
+            <v-btn color="secondary" text plain class="overline">
+                REGISTER
             </v-btn>
-            <v-divider vertical class="ml-8" inset></v-divider>
-            <v-btn
-                color="primary"
-                text
-                class="ml-16"
-                @click="$router.push('/contact-us')"
-            >
-                <div class="text font-weight-medium">Contact Us</div>
+            <v-btn color="secondary" elevation="0" class="overline white--text">
+                <v-badge
+                    color="tertiary"
+                    light
+                    class="primary--text"
+                    :content="cart"
+                    v-if="cart > 0"
+                >
+                    cart
+                </v-badge>
+                <span v-else> cart </span>
             </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn color="secondary" class="ml-16" depressed>
-                <div class="text font-weight-medium primary--text">CART</div>
-            </v-btn>
-        </v-toolbar> -->
-    </section>
+        </div>
+    </v-app-bar>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
+import _ from "lodash";
 export default {
     data() {
         return {
             items: [],
-            cart: 0,
+            search: "",
         };
     },
     async mounted() {
         let vm = this;
-        const { data } = await axios.get("/categories");
+        const { data } = await axios.get("/guest/categories");
         vm.items = data;
+        if (vm.$ls.get("cart")) {
+            let cart = vm.$ls.get("cart");
+            vm.setCart(cart.length);
+        }
+    },
+    computed: {
+        ...mapState({
+            cart: (state) => state.app.cart,
+        }),
     },
     created() {},
-    watch: {},
-    methods: {},
+    watch: {
+        search: _.debounce(async function (value) {
+            let vm = this;
+            vm.setSearch(value);
+            if (vm.$route.name !== "menu-product-search") {
+                vm.$router.push("/menu/product-search");
+            }
+            if (value && vm.$route.name !== "menu-index") {
+                vm.$router.push("/menu");
+                setTimeout(() => {
+                    vm.$router.push("/menu/product-search");
+                }, 400);
+            }
+            if (value == "") {
+                vm.$router.push("/menu");
+            }
+            vm.$forceUpdate();
+        }, 500),
+    },
+    methods: {
+        ...mapMutations({
+            setCart: "app/setCart",
+            setSearch: "app/setSearch",
+        }),
+    },
 };
 </script>
 <style scoped>
@@ -117,5 +114,8 @@ export default {
     font-weight: 500;
     line-height: 1.1;
     color: inherit;
+}
+.v-badge__badge {
+    color: #000 !important;
 }
 </style>

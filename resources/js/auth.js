@@ -11,6 +11,14 @@ Vue.use(VueCookie);
 Vue.config.productionTip = false;
 
 window.axios = axios;
+let token = document.head.querySelector('meta[name="csrf-token"]');
+window.axios = _axios.create({
+    baseURL: window.location.origin + "/guest",
+    headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRF-TOKEN": token.content
+    }
+});
 
 VeeValidate.Validator.extend("verify_password", {
     getMessage: field =>

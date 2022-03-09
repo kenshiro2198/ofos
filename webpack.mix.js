@@ -47,6 +47,6 @@ mix
 // .js("resources/js/admin", "public/js/admin.js")
     .js("resources/js/main", "public/js/main.js")
    //  .js("resources/js/auth", "public/js/auth.js")
-    // .sass("resources/sass/app.scss", "public/css")
+    .sass("resources/sass/app.scss", "public/css")
     .disableSuccessNotifications();
 

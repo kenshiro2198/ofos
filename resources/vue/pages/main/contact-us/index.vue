@@ -14,7 +14,7 @@
         </v-toolbar>
         <v-container>
             <v-row align="center" justify="center">
-                <v-col align-self="align" cols="9">
+                <v-col align-self="center" cols="9">
                     <v-card
                         width="100%"
                         height="400"
