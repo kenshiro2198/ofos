@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
+
 Route::group(['middleware' => 'guest', 'prefix' => 'guest'], function () {
     Route::get('/categories', 'CategoryController@index');
     Route::get('/category/items', 'CategoryController@items');
