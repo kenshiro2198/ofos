@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use App\Custom\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'firstname', 'lastname', 'email', 'password', 'number', 'type',
     ];
 
     /**
@@ -24,15 +24,28 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'api_token', 'csrf_token',
     ];
+    /**
+     * Roll API Key
+     */
+    public function rollApiKey()
+    {
+        do {
+            $this->api_token = str_random(60);
+        } while ($this->where('api_token', $this->api_token)->exists());
+        $this->save();
+    }
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * Roll CSRF Key
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function rollCsrfKey()
+    {
+        do {
+            $this->csrf_token = str_random(60);
+        } while ($this->where('csrf_token', $this->csrf_token)->exists());
+        $this->save();
+        return $this->csrf_token;
+    }
 }
