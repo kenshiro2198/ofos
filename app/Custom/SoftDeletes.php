@@ -148,7 +148,7 @@ trait SoftDeletes
      */
     public function getDeletedAtColumn()
     {
-        return 'isDeleted';
+        return 'is_deleted';
     }
 
     /**

@@ -9,14 +9,14 @@ use Illuminate\Database\Eloquent\Model as BaseModel;
 class Model extends BaseModel
 {
     use SoftDeletes;
-    const DELETED_AT = 'isDeleted';
+    const DELETED_AT = 'is_deleted';
     const CREATED_AT = 'createdAt';
     const UPDATED_AT = 'updatedAt';
 
     protected $casts = [
         'createdBy' => 'int',
         'updatedBy' => 'int',
-        'isDeleted' => 'bool',
+        'is_deleted' => 'bool',
     ];
 
     public static $snakeCaseAttribute = false;
