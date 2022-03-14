@@ -12,23 +12,23 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
  */
-Route::post('/login', 'API\LoginController@login');
 Route::get('/category/items', 'CategoryController@items');
+Route::post('/login', 'API\LoginController@login');
 
-Route::group(['middleware' => ['auth:api', 'api_csrf']], function () {
+/* Route::group(['middleware' => ['auth:api', 'api_csrf']], function () {
 //
-    Route::get('/category/items', 'CategoryController@items');
-    Route::post("/logout", function () {
-        $user = Auth::guard('api')->user();
-        $user->api_token = null;
-        $user->csrf_token = null;
-        $user->save();
-        $response = [
-            'response_code' => 1,
-            'data' => [],
-            'message' => "Success.",
-            'csrf_token' => null,
-        ];
-        return response()->json($response, 200);
-    });
+Route::get('/category/items', 'CategoryController@items');
+Route::post("/logout", function () {
+$user = Auth::guard('api')->user();
+$user->api_token = null;
+$user->csrf_token = null;
+$user->save();
+$response = [
+'response_code' => 1,
+'data' => [],
+'message' => "Success.",
+'csrf_token' => null,
+];
+return response()->json($response, 200);
 });
+}); */
