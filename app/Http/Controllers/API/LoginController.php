@@ -13,14 +13,14 @@ class LoginController extends APIBaseController
     public function login(Request $request)
     {
         try {
-            $user = User::where('email_address', $request->get('email_address'))->first();
+            $user = User::where('email', $request->get('email'))->first();
             if ($user) {
                 $auth = Hash::check($request->get('password'), $user->password);
 
                 if ($auth) {
                     $user->rollApiKey();
                     $csrf_token = $user->rollCsrfKey();
-                    $user = User::where('email_address', $request->get('email_address'))->where('type', 2);
+                    $user = User::where('email', $request->get('email'))->where('type', 2);
                     $currentPath = Route::getFacadeRoot()->current()->uri();
                     if ($currentPath == 'api/login') {
                         $user = $user->selectRaw('id,firstname,lastname,number,email,api_token,csrf_token')->first()->toArray();
