@@ -32,13 +32,13 @@ class LoginController extends APIBaseController
             return $this->sendError('Invalid login credentials.', -2); // Invalid Email Address or Password
         } catch (\Exception$e) {
             Log::error($e);
-            return $this->sendError("System error has occurred.");
+            return $this->sendError($e);
         } catch (\Error$e) {
             Log::error($e);
-            return $this->sendError("System error has occurred.");
+            return $this->sendError($e);
         } catch (\Throwable$e) {
             Log::error($e);
-            return $this->sendError("System error has occurred.");
+            return $this->sendError($e);
         }
     }
 }
