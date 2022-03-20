@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
  */
 Route::get('/category/items', 'CategoryController@items');
 Route::post('/login', 'API\LoginController@login');
+Route::post('/register', 'API\RegisterController@register');
+Route::post('/order', 'API\OrderController@order');
+Route::get('/track/{id}', 'API\TrackController@track');
+Route::get('/address/{id}', 'API\AddressController@index');
 
 /* Route::group(['middleware' => ['auth:api', 'api_csrf']], function () {
 Route::get('/category/items', 'CategoryController@items');
