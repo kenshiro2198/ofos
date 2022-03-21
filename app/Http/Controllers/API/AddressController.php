@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Log;
 
 class AddressController extends APIBaseController
 {
-    public function index($id)
+    public function index(Request $request)
     {
         try {
-            $user = UserAddress::where('user_id', $id)->get();
+            $user = UserAddress::where('user_id', $request->get('id'));
 
             return $this->sendResponse($user, 'Success.');
         } catch (\Exception$e) {
