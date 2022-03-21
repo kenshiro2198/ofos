@@ -11,7 +11,7 @@ class AddressController extends APIBaseController
     public function index(Request $request)
     {
         try {
-            $user = UserAddress::where('user_id', $request->get('id'));
+            $user = UserAddress::where('user_id', $request->get('id'))->get();
 
             return $this->sendResponse($user, 'Success.');
         } catch (\Exception$e) {
