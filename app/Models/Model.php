@@ -10,12 +10,12 @@ class Model extends BaseModel
 {
     use SoftDeletes;
     const DELETED_AT = 'is_deleted';
-    const CREATED_AT = 'createdAt';
-    const UPDATED_AT = 'updatedAt';
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 
     protected $casts = [
-        'createdBy' => 'int',
-        'updatedBy' => 'int',
+        'created_by' => 'int',
+        'updated_by' => 'int',
         'is_deleted' => 'bool',
     ];
 
