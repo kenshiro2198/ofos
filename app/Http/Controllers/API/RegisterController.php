@@ -19,7 +19,6 @@ class RegisterController extends APIBaseController
                 $query->firstname = $request->get('firstname');
                 $query->lastname = $request->get('lastname');
                 $query->email = $request->get('email');
-                $query->username = $request->get('username');
                 $query->password = Hash::make($request->get('password'));
                 $query->number = $request->get('number');
                 $query->type = 2;
