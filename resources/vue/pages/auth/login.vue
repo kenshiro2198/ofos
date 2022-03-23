@@ -141,8 +141,8 @@ export default {
             focused: false,
             show: false,
             form: {
-                identity: "johnarbyarceo@gmail.com",
-                password: "1234",
+                identity: "test@gdistrict.com",
+                password: "Test@123",
                 type: 1,
             },
             login_error: [],
