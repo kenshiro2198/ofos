@@ -20,4 +20,4 @@ Route::group(['middleware' => 'auth', 'prefix' => 'web'], function () {
     ]);
 });
 
-Route::get('/{any?}', 'Admin\SpaController')->where('any', '[\/\w\.-]*')->middleware('auth');
+Route::get('/{any?}', 'Admin\SpaController')->where('any', '[\/\w\.-]*');
