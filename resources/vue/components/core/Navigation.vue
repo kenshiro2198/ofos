@@ -51,7 +51,7 @@
                     </v-list-item-avatar>
                     <v-list-item-content>
                         <v-list-item-title class="subtitle-2">{{
-                            "Juan Dela Cruz"
+                            $me.fullname
                         }}</v-list-item-title>
                     </v-list-item-content>
 
