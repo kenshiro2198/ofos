@@ -1,9 +1,7 @@
 <template>
-    <v-main>
+    <v-main class="pa-0">
         <core-header />
+        <core-navigation />
         <core-view />
-
-        <core-cart />
-        <core-footer />
     </v-main>
 </template>

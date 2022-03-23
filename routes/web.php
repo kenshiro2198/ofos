@@ -1,12 +1,23 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'guest', 'prefix' => 'guest'], function () {
-    Route::get('/categories', 'CategoryController@index');
-    Route::get('/category/items', 'CategoryController@items');
-    Route::get('/items', 'ItemController@index');
+Route::get('/', function () {
+    return redirect('/login');
+})->middleware('guest');
+Route::get('/login', function () {
+    return view('auth');
+})->middleware('guest');
+Route::post('/login', "Auth\LoginController@login");
+Route::get('/logout', 'Auth\LoginController@logout');
+Route::group(['middleware' => 'auth', 'prefix' => 'web'], function () {
+    Route::get('/me', 'Admin\UsersController@me');
+    Route::get('/dashboard', 'Admin\DashboardController@index');
+    Route::get('/is-unique', 'Admin\UsersController@unique');
+    Route::apiResources([
+        'categories' => 'Admin\CategoryController',
+        'items' => 'Admin\ItemController',
+        'users' => 'Admin\UsersController',
+    ]);
 });
 
-Route::get('/{any?}', function () {
-    return view('main');
-})->where('any', '[\/\w\.-]*')->middleware('guest');
+Route::get('/{any?}', 'Admin\SpaController')->where('any', '[\/\w\.-]*')->middleware('auth');

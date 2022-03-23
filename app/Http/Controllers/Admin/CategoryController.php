@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Item;
+use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class ItemController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,7 @@ class ItemController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Item::with('category');
+        $query = Category::query();
         $columns = [
             'name',
         ];
@@ -30,40 +31,49 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $query = new Category();
+        $query->name = $request->name;
+        $query->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Item  $item
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Item $item)
+    public function show(Category $category)
     {
-        //
+        return $category;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Item  $item
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Item $item)
+    public function update(Request $request, Category $category)
     {
-        //
+        $category->name = $request->name;
+        $category->save();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Item  $item
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Item $item)
+    public function destroy(Category $category)
     {
         //
     }
+    public function items(Request $request)
+    {
+        $query = Category::with('items');
+        return $query->get();
+    }
+
 }

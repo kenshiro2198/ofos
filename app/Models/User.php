@@ -26,6 +26,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    protected $appends = ['fullname'];
     /**
      * Roll API Key
      */
@@ -47,5 +48,9 @@ class User extends Authenticatable
         } while ($this->where('csrf_token', $this->csrf_token)->exists());
         $this->save();
         return $this->csrf_token;
+    }
+    public function getFullnameAttribute()
+    {
+        return $this->firstname . ' ' . $this->lastname;
     }
 }

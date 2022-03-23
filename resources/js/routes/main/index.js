@@ -7,7 +7,7 @@ import { createRouterLayout } from "vue-router-layout";
 const Error = () => import("@pages/error/404");
 
 Vue.use(VueRouter);
-const RouterLayout = createRouterLayout(layout => {
+const RouterLayout = createRouterLayout((layout) => {
     // Resolves a layout component with layout type string.
     return import("@layouts/main/" + layout + ".vue");
 });
@@ -24,19 +24,13 @@ export default new VueRouter({
                     name: "Error Page",
                     path: "*",
                     component: Error,
-                    meta: {
-                        ac: true
-                    }
-                }
-            ]
+                },
+            ],
         },
         {
             name: "Name",
             path: "*",
             component: Error,
-            meta: {
-                ac: true
-            }
-        }
-    ]
+        },
+    ],
 });

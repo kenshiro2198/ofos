@@ -13,7 +13,7 @@ class AddressController extends APIBaseController
         try {
             $user = UserAddress::where('user_id', $request->get('id'))->get();
 
-            return $this->sendResponse(json_encode($user), 'Success.');
+            return $this->sendResponse($user, 'Success.');
         } catch (\Exception$e) {
             Log::error($e);
             return $this->sendError("System error has occurred.");

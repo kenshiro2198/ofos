@@ -18,7 +18,7 @@ mix.webpackConfig({
            "@layouts": path.resolve(__dirname, "resources/vue/layouts"),
          //   "@admin": path.resolve(__dirname, "resources/vue/pages/admin"),
            "@main": path.resolve(__dirname, "resources/vue/pages/main"),
-         //   "@auth": path.resolve(__dirname, "resources/vue/pages/auth"),
+           "@auth": path.resolve(__dirname, "resources/vue/pages/auth"),
            "@components": path.resolve(__dirname, "resources/vue/components")
        }
    },
@@ -28,11 +28,11 @@ mix.webpackConfig({
            importPrefix: "@main/",
            output: "resources/js/routes/main/routes.js"
        }),
-       /* new VueAutoRoutingPlugin({
+       new VueAutoRoutingPlugin({
            pages: "resources/vue/pages/auth/",
            importPrefix: "@auth/",
            output: "resources/js/routes/auth/routes.js"
-       }), */
+       }),
        /* new VueAutoRoutingPlugin({
          pages: "resources/vue/pages/admin/",
          importPrefix: "@admin/",
@@ -46,7 +46,7 @@ mix.webpackConfig({
 mix
 // .js("resources/js/admin", "public/js/admin.js")
     .js("resources/js/main", "public/js/main.js")
-   //  .js("resources/js/auth", "public/js/auth.js")
+    .js("resources/js/auth", "public/js/auth.js")
     .sass("resources/sass/app.scss", "public/css")
     .disableSuccessNotifications();
 
