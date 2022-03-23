@@ -70,7 +70,9 @@ import { mapActions } from "vuex";
 export default {
     data() {
         return {
-            form: {},
+            form: {
+                type: 1,
+            },
             buttons: [
                 {
                     icon: "cancel",
