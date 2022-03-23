@@ -136,6 +136,7 @@
 <script>
 import { Cropper, CircleStencil } from "vue-advanced-cropper";
 import { WebCam } from "vue-cam-vision";
+import "vue-advanced-cropper/dist/style.css";
 
 export default {
     components: {
