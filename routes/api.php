@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
  */
-Route::get('/category/items', 'CategoryController@items');
+Route::get('/category/items', 'Admin\CategoryController@items');
 Route::post('/login', 'API\LoginController@login');
 Route::post('/register', 'API\RegisterController@register');
 Route::post('/order', 'API\OrderController@order');

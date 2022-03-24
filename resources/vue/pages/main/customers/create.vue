@@ -21,8 +21,8 @@
                             <v-text-field
                                 v-model="form.lastname"
                                 label="Last name"
-                                data-vv-name="last name|verify_name"
-                                v-validate="'required'"
+                                data-vv-name="last name"
+                                v-validate="'required|verify_name'"
                                 class="required"
                                 :error-messages="errors.collect('last name')"
                             ></v-text-field>
