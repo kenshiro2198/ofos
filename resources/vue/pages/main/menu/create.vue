@@ -16,30 +16,50 @@
                                     v-model="form.image"
                                 ></g-avatar-picker>
                             </div>
+                            <v-autocomplete
+                                label="Category"
+                                v-validate="'required'"
+                                :items="categories"
+                                class="required"
+                                item-text="name"
+                                item-value="id"
+                                data-vv-name="category"
+                                v-model="form.category"
+                                :error-messages="errors.collect('category')"
+                            ></v-autocomplete>
                             <v-text-field
-                                v-model="form.firstname"
+                                v-model="form.name"
                                 label="Name"
                                 data-vv-name="Name"
                                 v-validate="'required'"
                                 class="required"
                                 :error-messages="errors.collect('Name')"
                             ></v-text-field>
-                            <v-autocomplete
-                                label="Category"
+                            <v-textarea
+                                v-model="form.description"
+                                label="Description"
+                                data-vv-name="Description"
                                 v-validate="'required'"
-                                :items="categories"
                                 class="required"
-                                multiple
-                                item-text="name"
-                                item-value="id"
-                                chips
-                                small-chips
-                                clearable
-                                deletable-chips
-                                data-vv-name="category"
-                                v-model="form.category"
-                                :error-messages="errors.collect('category')"
-                            ></v-autocomplete>
+                                :error-messages="errors.collect('Description')"
+                            ></v-textarea>
+
+                            <v-text-field
+                                v-model="form.qty"
+                                label="Quantity"
+                                data-vv-name="Quantity"
+                                v-validate="'required'"
+                                class="required"
+                                :error-messages="errors.collect('Quantity')"
+                            ></v-text-field>
+                            <g-number-input
+                                v-model="form.price"
+                                label="Price"
+                                data-vv-name="price"
+                                v-validate="'required'"
+                                class="required"
+                                :error-messages="errors.collect('price')"
+                            ></g-number-input>
                         </v-card-text>
                     </v-card>
                 </v-col>
@@ -80,31 +100,9 @@ export default {
             ],
         };
     },
-    watch: {
-        "form.firstname"(val) {
-            if (val) {
-                this.form.firstname =
-                    val.charAt(0).toUpperCase() + val.slice(1);
-            }
-        },
-        "form.lastname"(val) {
-            if (val) {
-                this.form.lastname = val.charAt(0).toUpperCase() + val.slice(1);
-            }
-        },
-    },
     created() {
         let vm = this;
         vm.getCategories();
-        Validator.extend("unique_email", {
-            validate: vm.checkEmail,
-            getMessage: (field, params, data) => "Email is already existing",
-        });
-
-        Validator.extend("unique_username", {
-            validate: vm.checkUsername,
-            getMessage: (field, params, data) => "Username is already existing",
-        });
     },
     computed: {
         ...mapState({
@@ -114,45 +112,23 @@ export default {
     methods: {
         ...mapActions({
             getCategories: "category/fetch",
-            save: "user/save",
+            save: "menu/save",
         }),
-        async checkEmail(value) {
-            var unique = (
-                await axios.get("/is-unique", {
-                    params: {
-                        model: "User",
-                        value: this.form.email,
-                        field: "email",
-                        type: 2,
-                    },
-                })
-            ).data;
-            return unique;
-        },
-        async checkUsername(value) {
-            var unique = (
-                await axios.get("/is-unique", {
-                    params: {
-                        model: "User",
-                        value: this.form.username,
-                        field: "username",
-                        type: 2,
-                    },
-                })
-            ).data;
-            return unique;
-        },
         async submit() {
             let vm = this;
 
             const valid = await vm.$validator.validateAll();
             if (valid) {
                 try {
-                    await vm.save(vm.form);
-                    vm.$toast(this.spiel.added, "success");
-                    vm.form = {};
+                    const data = await vm.save(vm.form);
+                    if (data == "error") {
+                        vm.$toast("Image is required", "error");
+                    } else {
+                        vm.$toast(this.spiel.added, "success");
+                        vm.form = {};
+                    }
                 } catch (error) {
-                    vm.$toast("Error.", "error");
+                    vm.$toast(vm.spiel.error, "error");
                 }
             } else {
                 vm.$toast("Please fill out required fields.", "error");

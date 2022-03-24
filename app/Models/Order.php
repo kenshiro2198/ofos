@@ -12,9 +12,9 @@ class Order extends Model
         'is_deleted' => 'boolean',
     ];
 
-    public function items()
+    public function item()
     {
-        return $this->hasMany(OrderItem::class, 'order_id');
+        return $this->belongsTo(Item::class, 'item_id');
     }
     public function tracker()
     {

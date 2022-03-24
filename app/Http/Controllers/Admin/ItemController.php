@@ -31,7 +31,18 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $query = new Item();
+        $query->name = $request->name;
+        $query->category_id = $request->category;
+        if (!empty($request->image) && $this->isBase64($request->image)) {
+            $query->image = $this->uploadImage($request->image, 'images', $request->name);
+        } else {
+            return "error";
+        }
+        $query->description = $request->description;
+        $query->qty = $request->qty;
+        $query->price = $request->price;
+        $query->save();
     }
 
     /**
@@ -42,7 +53,7 @@ class ItemController extends Controller
      */
     public function show(Item $item)
     {
-        //
+        return $item->load('category');
     }
 
     /**
@@ -54,7 +65,15 @@ class ItemController extends Controller
      */
     public function update(Request $request, Item $item)
     {
-        //
+        $item->name = $request->name;
+        $item->category_id = $request->category;
+        if (!empty($request->image) && $this->isBase64($request->image)) {
+            $item->image = $this->uploadImage($request->image, 'images', $item->id, $request->name);
+        }
+        $item->description = $request->description;
+        $item->qty = $request->qty;
+        $item->price = $request->price;
+        $item->save();
     }
 
     /**
@@ -65,6 +84,7 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        //
+        $item->delete();
+        return response()->json(true);
     }
 }

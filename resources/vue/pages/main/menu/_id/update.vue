@@ -1,24 +1,78 @@
 <template>
-    <v-dialog persistent max-width="500" :value="true">
-        <v-card rounded>
-            <v-card-title>Category</v-card-title>
-            <v-card-text>
-                <v-text-field
-                    v-model="form.firstname"
-                    label="name"
-                    data-vv-name="name"
-                    v-validate="'required'"
-                    class="required"
-                    :error-messages="errors.collect('name')"
-                ></v-text-field>
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <vv-btn @click="$router.go(-1)">Close</vv-btn>
-                <vv-btn @click="submit" color="primary">Save</vv-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
+    <div>
+        <g-toolbar :actions="buttons" />
+        <v-container grid-list-xs>
+            <v-row wrap justify="center">
+                <v-col cols="12" sm="11" md="7">
+                    <g-error-msg :errorMsg="errors.all()"></g-error-msg>
+                </v-col>
+                <v-col cols="12" sm="11" md="6">
+                    <v-card color="transparent" elevation="0">
+                        <v-card-title>Menu</v-card-title>
+                        <v-card-text>
+                            <div class="text-center">
+                                <g-avatar-picker
+                                    size="100"
+                                    v-model="form.image"
+                                ></g-avatar-picker>
+                            </div>
+                            <v-autocomplete
+                                label="Category"
+                                v-validate="'required'"
+                                :items="categories"
+                                class="required"
+                                item-text="name"
+                                item-value="id"
+                                data-vv-name="category"
+                                v-model="form.category"
+                                :error-messages="errors.collect('category')"
+                            ></v-autocomplete>
+                            <v-text-field
+                                v-model="form.name"
+                                label="Name"
+                                data-vv-name="Name"
+                                v-validate="'required'"
+                                class="required"
+                                :error-messages="errors.collect('Name')"
+                            ></v-text-field>
+                            <v-textarea
+                                v-model="form.description"
+                                label="Description"
+                                data-vv-name="Description"
+                                v-validate="'required'"
+                                class="required"
+                                :error-messages="errors.collect('Description')"
+                            ></v-textarea>
+
+                            <v-text-field
+                                v-model="form.quantity"
+                                label="Quantity"
+                                data-vv-name="Quantity"
+                                v-validate="'required'"
+                                class="required"
+                                :error-messages="errors.collect('Quantity')"
+                            ></v-text-field>
+                            <g-number-input
+                                v-model="form.price"
+                                label="Price"
+                                data-vv-name="price"
+                                v-validate="'required'"
+                                class="required"
+                                :error-messages="errors.collect('price')"
+                            ></g-number-input>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <vv-btn @click="$router.go(-1)">Close</vv-btn>
+                            <vv-btn @click="submit" color="primary"
+                                >Save</vv-btn
+                            >
+                        </v-card-actions>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
+    </div>
 </template>
 <route-meta>
       {
@@ -26,8 +80,7 @@
       }
 </route-meta>
 <script>
-import { Validator } from "vee-validate";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 export default {
     data() {
         return {
@@ -55,87 +108,35 @@ export default {
             verification: true,
         };
     },
-    watch: {
-        "form.firstname"(val) {
-            if (val) {
-                this.form.firstname =
-                    val.charAt(0).toUpperCase() + val.slice(1);
-            }
-        },
-        "form.lastname"(val) {
-            if (val) {
-                this.form.lastname = val.charAt(0).toUpperCase() + val.slice(1);
-            }
-        },
-        "form.email"(val) {
-            let vm = this;
-            if (vm.oldEmail != val) {
-                vm.verification = true;
-            }
-        },
-    },
 
     computed: {
-        ...mapGetters("customer", ["find"]),
+        ...mapGetters("menu", ["find"]),
         id() {
             return this.$route.params.id;
         },
+        ...mapState({
+            categories: (state) => state.category.list,
+        }),
     },
     mounted() {
         let vm = this;
         vm.initialize();
-        Validator.extend("unique_email", {
-            validate: vm.checkEmail,
-            getMessage: (field, params, data) => "Email is already existing",
-        });
-
-        Validator.extend("unique_username", {
-            validate: vm.checkUsername,
-            getMessage: (field, params, data) => "Username is already existing",
-        });
+        vm.getCategories();
     },
     methods: {
         ...mapActions({
-            save: "user/save",
+            getCategories: "category/fetch",
+            save: "menu/save",
         }),
         async initialize() {
             let vm = this;
             try {
                 const data = await vm.find(vm.$route.params.id);
                 vm.form = data;
-                vm.form.position = data.positions;
-                vm.oldEmail = data.email;
+                vm.form.category = data.category_id;
             } catch (e) {
                 vm.$toast(e, "#B71C1C");
             }
-        },
-        async checkEmail(value) {
-            var unique = (
-                await axios.get("/is-unique", {
-                    params: {
-                        model: "User",
-                        value: this.form.email,
-                        field: "email",
-                        id: this.form.id,
-                        type: 2,
-                    },
-                })
-            ).data;
-            return unique;
-        },
-        async checkUsername(value) {
-            var unique = (
-                await axios.get("/is-unique", {
-                    params: {
-                        model: "User",
-                        value: this.form.username,
-                        field: "username",
-                        id: this.form.id,
-                        type: 2,
-                    },
-                })
-            ).data;
-            return unique;
         },
         async submit() {
             let vm = this;
@@ -143,11 +144,13 @@ export default {
             const valid = await vm.$validator.validateAll();
             if (valid) {
                 try {
-                    await vm.save(vm.form);
-                    const user = await vm.getUser();
-                    vm.setUser(user);
-                    vm.$toast(this.spiel.saved, "#2dce89");
-                    vm.$router.go(-1);
+                    const data = await vm.save(vm.form);
+                    if (data == "error") {
+                        vm.$toast("Image is required", "error");
+                    } else {
+                        vm.$toast(this.spiel.saved, "success");
+                        vm.$router.go(-1);
+                    }
                 } catch (error) {
                     vm.$toast(vm.spiel.error, "#B71C1C");
                 }

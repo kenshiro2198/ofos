@@ -82,6 +82,49 @@ Vue.mixin({
                 return result * sortOrder;
             };
         },
+        formatNumber(num, dec = 2) {
+            if (num != null) {
+                num = num;
+                if (typeof num == "number") {
+                    num = num.toFixed(dec);
+                }
+                var parts = num.split(".");
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                num = parts.join(".");
+                if (num == "NaN") return "0.00";
+                return num;
+            } else {
+                return "0.00";
+            }
+            // this.$store.dispatch('showHideLoading', show);
+        },
+        formatDate(date, format = "MMM DD, YYYY hh:mm a") {
+            return this.$moment(date).format(format);
+        },
+        getStatus(status) {
+            let value = "";
+            switch (status) {
+                case 2:
+                    value = "Order Confirmed";
+                    break;
+                case 3:
+                    value = "Food Being Prepared";
+                    break;
+                case 4:
+                    value = "Food Pickup";
+                    break;
+                case 5:
+                    value = "Food Delivered";
+                    break;
+                case 6:
+                    value = "Cancelled";
+                    break;
+                default:
+                    value = "Not Confirmed Yet";
+                    break;
+            }
+            return value;
+        },
         async director(data, spiel = "added") {
             //***
             //put this after axios.post/put

@@ -1,18 +1,20 @@
 import { requestIndex } from "@js/util";
 export default {
     async fetch(ctx, options) {
-        requestIndex("/categories", ctx, options);
+        requestIndex("/orders", ctx, options);
     },
     async save({ state, commit }, form) {
         // console.log(form);
         if (form.id) {
-            await axios.put("/categories/" + form.id, form);
+            const { data } = await axios.put("/orders/" + form.id, form);
+            return data;
         } else {
-            await axios.post("/categories", form);
+            const { data } = await axios.post("/orders", form);
+            return data;
         }
     },
     async delete({ state, commit }, { id, callback = () => {} }) {
-        const res = await axios.delete("/categories/" + id); // delete
+        const res = await axios.delete("/orders/" + id); // delete
         callback(res.data);
     },
 };

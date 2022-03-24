@@ -2,8 +2,6 @@ import { requestIndex } from "@js/util";
 export default {
     async fetch(ctx, options) {
         requestIndex("/users?type=2", ctx, options);
-        // const { data } = await axios.get('/departments');
-        // commit('setList', data);
     },
     async save({ state, commit }, form) {
         // console.log(form);

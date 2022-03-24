@@ -34,7 +34,7 @@ class Model extends BaseModel
                 unset($model->from_mobile);
             } else {
                 if (Auth::guard('web')->check()) {
-                    $model->createdBy = Auth::id();
+                    $model->created_by = Auth::id();
                 }
             }
         });
@@ -44,8 +44,8 @@ class Model extends BaseModel
                 unset($model->from_mobile);
             } else {
                 if (Auth::guard('web')->check()) {
-                    $model->updatedBy = Auth::id();
-                    $model->updatedAt = date("Y-m-d H:i:s");
+                    $model->updated_by = Auth::id();
+                    $model->updated_at = date("Y-m-d H:i:s");
                 }
             }
         });

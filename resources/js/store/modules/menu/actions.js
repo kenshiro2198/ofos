@@ -2,15 +2,15 @@ import { requestIndex } from "@js/util";
 export default {
     async fetch(ctx, options) {
         requestIndex("/items", ctx, options);
-        // const { data } = await axios.get('/departments');
-        // commit('setList', data);
     },
     async save({ state, commit }, form) {
         // console.log(form);
         if (form.id) {
-            await axios.put("/items/" + form.id, form);
+            const { data } = await axios.put("/items/" + form.id, form);
+            return data;
         } else {
-            await axios.post("/items", form);
+            const { data } = await axios.post("/items", form);
+            return data;
         }
     },
     async delete({ state, commit }, { id, callback = () => {} }) {

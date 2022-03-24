@@ -54,6 +54,9 @@
                                 >{{ position.name }}</v-chip
                             >
                         </template>
+                        <template v-slot:item.created_at="{ item }">
+                            {{ formatDate(item.created_at) }}
+                        </template>
                     </v-data-table>
                 </v-col>
             </v-row>
@@ -112,10 +115,10 @@ export default {
                     value: "fullname",
                 },
                 {
-                    text: "Email",
+                    text: "Creation Date",
                     align: "left",
                     sortable: true,
-                    value: "email",
+                    value: "created_at",
                 },
             ],
             items: [],

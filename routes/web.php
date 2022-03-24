@@ -16,6 +16,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'web'], function () {
     Route::apiResources([
         'categories' => 'Admin\CategoryController',
         'items' => 'Admin\ItemController',
+        'orders' => 'Admin\OrderController',
+        'reports' => 'Admin\ReportController',
         'users' => 'Admin\UsersController',
     ]);
 });

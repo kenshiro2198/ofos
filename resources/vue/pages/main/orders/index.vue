@@ -3,6 +3,22 @@
         <g-toolbar @search="search = $event" :actions="buttons" />
         <v-container fluid grid-list-lg>
             <v-row>
+                <v-col>
+                    <v-btn-toggle v-model="status" mandatory>
+                        <v-btn> All </v-btn>
+                        <v-btn> For Confirmation </v-btn>
+
+                        <v-btn> Confirmed </v-btn>
+
+                        <v-btn> Preparation </v-btn>
+
+                        <v-btn> Pickup </v-btn>
+                        <v-btn> Delivered </v-btn>
+                        <v-btn> Cancelled </v-btn>
+                    </v-btn-toggle>
+                </v-col>
+            </v-row>
+            <v-row>
                 <v-col cols="12">
                     <v-data-table
                         height="700"
@@ -39,8 +55,8 @@
                                 {{ item.name }}
                             </div>
                         </template>
-                        <template v-slot:item.created_at="{ item }">
-                            {{ formatDate(item.created_at) }}
+                        <template v-slot:item.order_time="{ item }">
+                            {{ formatDate(item.order_time) }}
                         </template>
                     </v-data-table>
                 </v-col>
@@ -51,30 +67,24 @@
 </template>
 <route-meta>
       {
-      "breadcrumb": "Menu"
+      "breadcrumb": "Orders"
       }
 </route-meta>
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions } from "vuex";
 export default {
     data() {
         return {
+            status: 0,
             options: {
                 type: 1,
             },
             ctx: [
                 {
-                    text: "Edit",
-                    icon: "mdi-pencil",
+                    text: "View Details",
+                    icon: "mdi-eye",
                     action: (item) => {
-                        this.$router.push(`/menu/${item.id}/update`);
-                    },
-                },
-                {
-                    text: "Delete",
-                    icon: "mdi-delete",
-                    action: (item) => {
-                        this.delete(item);
+                        this.$router.push(`/orders/${item.order_number}`);
                     },
                 },
             ],
@@ -83,7 +93,7 @@ export default {
                     icon: "plus",
                     name: "Create",
                     props: {
-                        to: "menu/create",
+                        to: "orders/create",
                         color: "primary",
                     },
                 },
@@ -97,41 +107,42 @@ export default {
                     value: "id",
                 },
                 {
-                    text: "Name",
+                    text: "Order Number",
                     align: "left",
                     sortable: true,
-                    value: "name",
+                    value: "order_number",
                 },
                 {
-                    text: "Category",
+                    text: "Order Date",
                     align: "left",
                     sortable: true,
-                    value: "category.name",
-                },
-                {
-                    text: "Creation Date",
-                    align: "left",
-                    sortable: true,
-                    value: "created_at",
+                    value: "order_time",
                 },
             ],
             items: [],
+            data: [],
         };
     },
-    computed: {
-        ...mapState({
-            data: (state) => state.menu.list,
-        }),
+    watch: {
+        async status(value) {
+            let vm = this;
+            if (value != 0) {
+                const { data } = await axios.get("/orders?status=" + value);
+                vm.data = data;
+            } else {
+                const { data } = await axios.get("/orders");
+                vm.data = data;
+            }
+
+            /* vm.setItem(this.$store.state.order, data); */
+        },
     },
     async created() {
         let vm = this;
-        vm.getItems();
+        const { data } = await axios.get("/orders");
+        vm.data = data;
     },
     methods: {
-        ...mapActions({
-            getItems: "menu/fetch",
-            remove: "menu/delete",
-        }),
         async delete(item) {
             let vm = this;
             const confirmed = await vm.$confirm(this.spiel.confirm, {

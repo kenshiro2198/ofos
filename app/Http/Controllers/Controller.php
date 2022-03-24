@@ -81,9 +81,9 @@ class Controller extends BaseController
     public static function uploadImage($content, $path, $name = null)
     {
         $image = Image::make(base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $content)));
-        // $ext = explode("/", $image->mime)[1];
-        $name = $name . '_' . time();
-        // $name = empty($name) ? time() . ".$ext" : $name;
+        $ext = explode("/", $image->mime)[1];
+        // $name = $name . '_' . time();
+        $name = $name . '_' . time() . ".jpg";
 
         Storage::put("public/$path/$name", $image->stream());
 
