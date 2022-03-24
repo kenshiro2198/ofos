@@ -38,7 +38,7 @@ class OrderController extends APIBaseController
             $tracker->order_id = $orderNo;
             $tracker->save();
             DB::commit();
-            return $this->sendResponse($query, 'Success.');
+            return $this->sendResponse($orderNo, 'Success.');
         } catch (\Exception$e) {
             Log::error($e);
             return $this->sendError("System error has occurred.");
