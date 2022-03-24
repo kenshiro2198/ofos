@@ -56,7 +56,7 @@ class OrderController extends APIBaseController
                     'x-public-key' => 'pk_45fb3c2682b9e78263bfa3a19ca82360',
                     'amount' => '1',
                     'description' => 'Food Payment',
-                    'customername' => $user->firstname . ' ' . $user->lastname,
+                    'customername' => $user->fullname,
                     'customermobile' => $user->number,
                     'customeremail' => $user->email,
                     'webhooksuccessurl' => "http://admin.gdistrictofficial.com/api/payment/success/$orderNo",
