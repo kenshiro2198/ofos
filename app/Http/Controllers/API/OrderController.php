@@ -73,6 +73,12 @@ class OrderController extends APIBaseController
             $data = ["url" => $data['checkouturl'], "order_number" => $orderNo];
 
             DB::commit();
+            return $response = [
+                'response_code' => 1,
+                'url' => $data['checkouturl'],
+                "order_number" => $orderNo,
+                'message' => "Success",
+            ];
             return $this->sendResponse($data, 'Success.');
         } catch (\Exception$e) {
             Log::error($e);
