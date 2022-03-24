@@ -56,14 +56,13 @@ class OrderController extends APIBaseController
                     'x-public-key' => 'pk_45fb3c2682b9e78263bfa3a19ca82360',
                     'amount' => '1',
                     'description' => 'Food Payment',
-                    'customername' => "John Arby Arceo",
+                    'customername' => $user->firstname . ' ' . $user->lastname,
                     'customermobile' => $user->number,
                     'customeremail' => $user->email,
                     'webhooksuccessurl' => "http://admin.gdistrictofficial.com/api/payment/success/$orderNo",
                     'webhookfailurl' => "http://admin.gdistrictofficial.com/api/payment/fail/$orderNo",
                 ),
             ));
-            /* $user->firstname . ' ' . $user->lastname */
 
             $response = curl_exec($curl);
             $err = curl_error($curl);
@@ -72,7 +71,7 @@ class OrderController extends APIBaseController
             if ($err) {
                 return $err;
             } else {
-                return $response;
+                return json_decode($response);
             }
 
             DB::commit();
