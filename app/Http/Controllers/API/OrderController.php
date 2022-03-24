@@ -71,7 +71,10 @@ class OrderController extends APIBaseController
             if ($err) {
                 return $err;
             } else {
-                return json_decode($response, true);
+                $data = json_decode($response, true);
+                $data = $data['data'];
+                $data = $data->checkouturl;
+                return $data;
             }
 
             DB::commit();
