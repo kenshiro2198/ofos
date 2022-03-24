@@ -74,7 +74,7 @@ class OrderController extends APIBaseController
                 $data = json_decode($response, true);
                 $data = $data['data'];
                 // $data = $data->checkouturl;
-                return $data;
+                return $data['checkouturl'];
             }
 
             DB::commit();
