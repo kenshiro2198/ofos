@@ -68,6 +68,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $category->deleted_at = date('Y-m-d H:i:s');
+        $category->save();
         $category->delete();
         return response()->json(true);
     }

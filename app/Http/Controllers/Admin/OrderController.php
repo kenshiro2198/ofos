@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderTracker;
 use App\Models\User;
+use DB;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -19,8 +20,16 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $query = OrderAddress::query();
+        $status = [$request->status];
+        if (is_array($request->status)) {
+            $status = $request->status;
+        }
         if ($request->status) {
-            $query = $query->where("status", $request->status);
+            $query = $query->whereIn("status", $status);
+        }
+        if ($request->from && $request->to) {
+            $query = $query->whereDate("order_time", ">=", $request->from)
+                ->whereDate("order_time", "<=", $request->to);
         }
         $columns = [
             'number',
@@ -96,13 +105,69 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
+        $order->deleted_at = date('Y-m-d H:i:s');
+        $order->save();
         $order->delete();
+
         return response()->json(true);
     }
     public function items(Request $request)
     {
         $query = Order::with('items');
         return $query->get();
+    }
+
+    public function orderCount(Request $request)
+    {
+        $query = OrderAddress::selectRaw("
+            month(order_time) as lMonth,
+            year(order_time) as lYear,
+            count(id) as totalOrder,
+            count(if((status=1),0,null)) as totalUnconfirmedOrder,
+            count(if((status=2),0,null)) as totalConfirmedOrder,
+            count(if((status=3),0,null)) as totalBeingPreparedOrder,
+            count(if((status=4),0,null)) as totalPickupOrder,
+            count(if((status=5),0,null)) as totalDeliveredOrder,
+            count(if((status=6),0,null)) as totalCancelledOrder
+        ")
+            ->whereDate("order_time", ">=", $request->from)
+            ->whereDate("order_time", "<=", $request->to)
+            ->groupBy('lMonth', 'lYear');
+        return $query->get();
+    }
+    public function salesReport(Request $request)
+    {
+        if ($request->type == 1) {
+
+            $query = DB::select(DB::raw(
+                "SELECT
+            YEAR(order_addresses.order_time) AS lYear,
+            SUM(items.price * orders.quantity) AS totalItemPrice
+            FROM orders
+            JOIN order_addresses ON order_addresses.order_number = orders.number
+            JOIN items ON items.id = orders.item_id
+            WHERE YEAR(order_addresses.order_time) BETWEEN '$request->from' AND '$request->to'
+            AND order_addresses.status = 5
+            GROUP BY lYear
+            "
+            ));
+            return $query;
+
+        } else {
+            $query = DB::select(DB::raw(
+                "SELECT MONTH(order_addresses.order_time) AS lMonth,
+            YEAR(order_addresses.order_time) AS lYear,
+            SUM(items.price * orders.quantity) AS totalItemPrice
+            FROM orders
+            JOIN order_addresses ON order_addresses.order_number = orders.number
+            JOIN items ON items.id = orders.item_id
+            WHERE DATE(order_addresses.order_time) BETWEEN '$request->from' AND '$request->to'
+            AND order_addresses.status = 5
+            GROUP BY lMonth, lYear
+            "
+            ));
+            return $query;
+        }
     }
 
 }

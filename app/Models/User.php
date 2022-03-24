@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Custom\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Str;
 
 class User extends Authenticatable
 {
@@ -27,13 +28,14 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
     protected $appends = ['fullname'];
+
     /**
      * Roll API Key
      */
     public function rollApiKey()
     {
         do {
-            $this->api_token = str_random(60);
+            $this->api_token = Str::random(60);
         } while ($this->where('api_token', $this->api_token)->exists());
         $this->save();
     }
@@ -44,7 +46,7 @@ class User extends Authenticatable
     public function rollCsrfKey()
     {
         do {
-            $this->csrf_token = str_random(60);
+            $this->csrf_token = Str::random(60);
         } while ($this->where('csrf_token', $this->csrf_token)->exists());
         $this->save();
         return $this->csrf_token;

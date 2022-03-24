@@ -84,6 +84,8 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
+        $item->deleted_at = date('Y-m-d H:i:s');
+        $item->save();
         $item->delete();
         return response()->json(true);
     }

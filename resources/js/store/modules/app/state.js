@@ -41,7 +41,7 @@ export default {
         {
             title: "Reports",
             icon: "mdi-file",
-            to: "/report",
+            to: "/reports",
         },
-    ]
+    ],
 };

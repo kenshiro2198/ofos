@@ -30,31 +30,6 @@
                         class="transparent"
                         v-context-menu="ctx"
                     >
-                        <template v-slot:item.name="{ item }">
-                            <div
-                                :style="
-                                    $vuetify.breakpoint.xsOnly
-                                        ? 'direction:rtl'
-                                        : ''
-                                "
-                                class="d-flex align-center"
-                            >
-                                <v-avatar
-                                    :class="[
-                                        {
-                                            'mr-3': !$vuetify.breakpoint.xsOnly,
-                                        },
-                                        {
-                                            'ml-3': $vuetify.breakpoint.xsOnly,
-                                        },
-                                    ]"
-                                    size="50"
-                                >
-                                    <v-img :src="item.image"></v-img>
-                                </v-avatar>
-                                {{ item.name }}
-                            </div>
-                        </template>
                         <template v-slot:item.order_time="{ item }">
                             {{ formatDate(item.order_time) }}
                         </template>

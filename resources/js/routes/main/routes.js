@@ -12,6 +12,8 @@ const MenuIndex = () =>
   import(/* webpackChunkName: "menu-index" */ '@main/menu/index.vue')
 const OrdersIndex = () =>
   import(/* webpackChunkName: "orders-index" */ '@main/orders/index.vue')
+const ReportsIndex = () =>
+  import(/* webpackChunkName: "reports-index" */ '@main/reports/index.vue')
 const UsersIndex = () =>
   import(/* webpackChunkName: "users-index" */ '@main/users/index.vue')
 const CustomersCreate = () =>
@@ -22,6 +24,8 @@ const UsersCreate = () =>
   import(/* webpackChunkName: "users-create" */ '@main/users/create.vue')
 const OrdersIdIndex = () =>
   import(/* webpackChunkName: "orders-id-index" */ '@main/orders/_id/index.vue')
+const ReportsIdIndex = () =>
+  import(/* webpackChunkName: "reports-id-index" */ '@main/reports/_id/index.vue')
 const CustomersIdUpdate = () =>
   import(/* webpackChunkName: "customers-id-update" */ '@main/customers/_id/update.vue')
 const MenuIdUpdate = () =>
@@ -89,6 +93,14 @@ export default [
     }
   },
   {
+    name: 'reports-index',
+    path: '/reports',
+    component: ReportsIndex,
+    meta: {
+      breadcrumb: 'Reports'
+    }
+  },
+  {
     name: 'users-index',
     path: '/users',
     component: UsersIndex,
@@ -124,6 +136,14 @@ export default [
     name: 'orders-id-index',
     path: '/orders/:id',
     component: OrdersIdIndex,
+    meta: {
+      breadcrumb: 'Details'
+    }
+  },
+  {
+    name: 'reports-id-index',
+    path: '/reports/:id',
+    component: ReportsIdIndex,
     meta: {
       breadcrumb: 'Details'
     }
