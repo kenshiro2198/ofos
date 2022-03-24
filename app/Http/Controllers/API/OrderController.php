@@ -68,17 +68,12 @@ class OrderController extends APIBaseController
             $err = curl_error($curl);
 
             curl_close($curl);
-            if ($err) {
-                return $err;
-            } else {
-                $data = json_decode($response, true);
-                $data = $data['data'];
-                // $data = $data->checkouturl;
-                return $data['checkouturl'];
-            }
+            $data = json_decode($response, true);
+            $data = $data['data'];
+            $data = ["url" => $data['checkouturl'], "order_number" => $orderNo];
 
             DB::commit();
-            return $this->sendResponse($response, 'Success.');
+            return $this->sendResponse($data, 'Success.');
         } catch (\Exception$e) {
             Log::error($e);
             return $e;
