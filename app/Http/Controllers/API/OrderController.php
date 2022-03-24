@@ -16,7 +16,8 @@ class OrderController extends APIBaseController
         try {
             DB::beginTransaction();
             $orderNo = mt_rand(100000000, 999999999);
-            foreach ($request->get('cart') as $key => $value) {
+            $cart = json_decode($request->get('cart'), true);
+            foreach ($cart as $key => $value) {
                 $query = new Order();
                 $query->number = $orderNo;
                 $query->user_id = $request->get('user_id');
@@ -42,11 +43,14 @@ class OrderController extends APIBaseController
             return $this->sendResponse($orderNo, 'Success.');
         } catch (\Exception$e) {
             Log::error($e);
+            return $e;
             return $this->sendError("System error has occurred.");
         } catch (\Error$e) {
+            return $e;
             Log::error($e);
             return $this->sendError("System error has occurred.");
         } catch (\Throwable$e) {
+            return $e;
             Log::error($e);
             return $this->sendError("System error has occurred.");
         }
