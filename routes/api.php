@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
  */
-Route::get('/category/items', 'Admin\CategoryController@items');
+Route::get('/category/items', 'CategoryController@items');
 Route::post('/login', 'API\LoginController@login');
 Route::post('/register', 'API\RegisterController@register');
 Route::post('/order', 'API\OrderController@order');
+Route::post('/payment/success/{id}', 'API\OrderController@paymentSuccess');
+Route::post('/payment/fail/{id}', 'API\OrderController@paymentFailed');
 Route::get('/track/{id}', 'API\TrackController@track');
 Route::get('/address', 'API\AddressController@index');
 Route::post('/address', 'API\AddressController@store');

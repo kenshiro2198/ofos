@@ -33,6 +33,7 @@ class OrderController extends APIBaseController
             $address->city = $request->get('city');
             $address->longitude = $request->get('longitude');
             $address->latitude = $request->get('latitude');
+            $address->payment_type = $request->get('payment_type');
             $address->save();
             $tracker = new OrderTracker();
             $tracker->order_id = $orderNo;
@@ -65,5 +66,17 @@ class OrderController extends APIBaseController
             Log::error($e);
             return $this->sendError("System error has occurred.");
         }
+    }
+    public function paymentSuccess($id)
+    {
+        $address = OrderAddress::where("order_number", $id)->first();
+        $address->is_paid = 1;
+        $address->save();
+    }
+    public function paymentFailed($id)
+    {
+        $address = OrderAddress::where("order_number", $id)->first();
+        $address->is_paid = 2;
+        $address->save();
     }
 }
