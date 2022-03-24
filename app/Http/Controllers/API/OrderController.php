@@ -70,7 +70,7 @@ class OrderController extends APIBaseController
             curl_close($curl);
             $data = json_decode($response, true);
             $data = $data['data'];
-            $data = ["url" => $data['checkouturl'], "order_number" => $orderNo];
+            // $data = ["url" => $data['checkouturl'], "order_number" => $orderNo];
 
             DB::commit();
             return $response = [
