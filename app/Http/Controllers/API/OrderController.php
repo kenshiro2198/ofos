@@ -71,7 +71,7 @@ class OrderController extends APIBaseController
             if ($err) {
                 return $err;
             } else {
-                return $response;
+                return json_decode($response, true);
             }
 
             DB::commit();
