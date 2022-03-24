@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderTracker;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -39,8 +40,43 @@ class OrderController extends APIBaseController
             $tracker = new OrderTracker();
             $tracker->order_id = $orderNo;
             $tracker->save();
+            $user = User::find($request->get('user_id'));
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://g.payx.ph/payment_request',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => array(
+                    'x-public-key' => 'pk_45fb3c2682b9e78263bfa3a19ca82360',
+                    'amount' => '1',
+                    'description' => 'Food Payment',
+                    'customername' => "John Arby Arceo",
+                    'customermobile' => $user->number,
+                    'customeremail' => $user->email,
+                    'webhooksuccessurl' => "http://admin.gdistrictofficial.com/api/payment/success/$orderNo",
+                    'webhookfailurl' => "http://admin.gdistrictofficial.com/api/payment/fail/$orderNo",
+                ),
+            ));
+            /* $user->firstname . ' ' . $user->lastname */
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+            if ($err) {
+                return $err;
+            } else {
+                return $response;
+            }
+
             DB::commit();
-            return $this->sendResponse($orderNo, 'Success.');
+            return $this->sendResponse($response, 'Success.');
         } catch (\Exception$e) {
             Log::error($e);
             return $e;
