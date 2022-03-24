@@ -54,7 +54,7 @@ class OrderController extends APIBaseController
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => array(
                     'x-public-key' => 'pk_45fb3c2682b9e78263bfa3a19ca82360',
-                    'amount' => '1',
+                    'amount' => $request->get('total'),
                     'description' => 'Food Payment',
                     'customername' => $user->fullname,
                     'customermobile' => $user->number,
