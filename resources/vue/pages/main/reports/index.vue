@@ -62,335 +62,196 @@
                                             </v-col>
                                         </v-row>
                                     </v-card-text>
-                                    <v-card-title>
-                                        <div
-                                            class="text-center"
-                                            v-if="tab == 0"
-                                        >
-                                            Report from
-                                            {{
-                                                formatDate(
-                                                    filter.from,
-                                                    "MM/DD/YYYY"
-                                                )
-                                            }}
-                                            to
-                                            {{
-                                                formatDate(
-                                                    filter.to,
-                                                    "MM/DD/YYYY"
-                                                )
-                                            }}
-                                        </div>
-                                        <div
-                                            class="text-center"
-                                            v-if="tab == 1"
-                                        >
-                                            Order Count Report from
-                                            {{
-                                                formatDate(
-                                                    filter.from,
-                                                    "MM/DD/YYYY"
-                                                )
-                                            }}
-                                            to
-                                            {{
-                                                formatDate(
-                                                    filter.to,
-                                                    "MM/DD/YYYY"
-                                                )
-                                            }}
-                                        </div>
-                                        <div
-                                            class="text-center"
-                                            v-if="tab == 2"
-                                        >
-                                            Sales Report from
-
-                                            {{
-                                                filter.type == 1
-                                                    ? formatDate(
-                                                          filter.from,
-                                                          "YYYY"
-                                                      )
-                                                    : formatDate(
-                                                          filter.from,
-                                                          "MM/YYYY"
-                                                      )
-                                            }}
-                                            to
-                                            {{
-                                                filter.type == 1
-                                                    ? formatDate(
-                                                          filter.to,
-                                                          "YYYY"
-                                                      )
-                                                    : formatDate(
-                                                          filter.to,
-                                                          "MM/YYYY"
-                                                      )
-                                            }}
-                                        </div>
-                                    </v-card-title>
-                                    <v-card-text>
-                                        <v-data-table
-                                            v-if="tab == 0"
-                                            height="700"
-                                            fixed-header
-                                            :headers="headers"
-                                            :items="data"
-                                            class="transparent"
-                                            v-context-menu="ctx"
-                                        >
-                                            <template
-                                                v-slot:item.order_time="{
-                                                    item,
-                                                }"
-                                            >
-                                                {{
-                                                    formatDate(item.order_time)
-                                                }}
-                                            </template>
-                                        </v-data-table>
-                                        <v-simple-table v-if="tab == 1">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-left">
-                                                        Date
-                                                    </th>
-                                                    <th class="text-left">
-                                                        Total Orders
-                                                    </th>
-                                                    <th class="text-left">
-                                                        Total Orders Not
-                                                        Confirmed
-                                                    </th>
-                                                    <th class="text-left">
-                                                        Total Orders Confirmed
-                                                    </th>
-                                                    <th class="text-left">
-                                                        Total Orders Cancelled
-                                                    </th>
-                                                    <th class="text-left">
-                                                        Total Orders Being
-                                                        Prepared
-                                                    </th>
-                                                    <th class="text-left">
-                                                        Total Orders Pickup
-                                                    </th>
-                                                    <th class="text-left">
-                                                        Total Orders Delivered
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr
-                                                    v-for="(
-                                                        item, index
-                                                    ) in data"
-                                                    :key="index"
-                                                >
-                                                    <td>
-                                                        {{
-                                                            formatDate(
-                                                                item.lMonth +
-                                                                    "/01/" +
-                                                                    item.lYear,
-                                                                "MMMM/YYYY"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                    <td>
-                                                        {{ item.totalOrder }}
-                                                    </td>
-                                                    <td>
-                                                        {{
-                                                            item.totalUnconfirmedOrder
-                                                        }}
-                                                    </td>
-                                                    <td>
-                                                        {{
-                                                            item.totalConfirmedOrder
-                                                        }}
-                                                    </td>
-                                                    <td>
-                                                        {{
-                                                            item.totalBeingPreparedOrder
-                                                        }}
-                                                    </td>
-                                                    <td>
-                                                        {{
-                                                            item.totalPickupOrder
-                                                        }}
-                                                    </td>
-                                                    <td>
-                                                        {{
-                                                            item.totalDeliveredOrder
-                                                        }}
-                                                    </td>
-                                                    <td>
-                                                        {{
-                                                            item.totalCancelledOrder
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td
-                                                        style="
-                                                            border-top: solid
-                                                                black 1px;
-                                                        "
-                                                        class="font-weight-bold"
-                                                    >
-                                                        TOTAL
-                                                    </td>
-                                                    <td
-                                                        style="
-                                                            border-top: solid
-                                                                black 1px;
-                                                        "
-                                                    >
-                                                        {{
-                                                            getTotal(
-                                                                data,
-                                                                "totalOrder"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        style="
-                                                            border-top: solid
-                                                                black 1px;
-                                                        "
-                                                    >
-                                                        {{
-                                                            getTotal(
-                                                                data,
-                                                                "totalUnconfirmedOrder"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        style="
-                                                            border-top: solid
-                                                                black 1px;
-                                                        "
-                                                    >
-                                                        {{
-                                                            getTotal(
-                                                                data,
-                                                                "totalConfirmedOrder"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        style="
-                                                            border-top: solid
-                                                                black 1px;
-                                                        "
-                                                    >
-                                                        {{
-                                                            getTotal(
-                                                                data,
-                                                                "totalBeingPreparedOrder"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        style="
-                                                            border-top: solid
-                                                                black 1px;
-                                                        "
-                                                    >
-                                                        {{
-                                                            getTotal(
-                                                                data,
-                                                                "totalPickupOrder"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        style="
-                                                            border-top: solid
-                                                                black 1px;
-                                                        "
-                                                    >
-                                                        {{
-                                                            getTotal(
-                                                                data,
-                                                                "totalDeliveredOrder"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        style="
-                                                            border-top: solid
-                                                                black 1px;
-                                                        "
-                                                    >
-                                                        {{
-                                                            getTotal(
-                                                                data,
-                                                                "totalCancelledOrder"
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </v-simple-table>
-                                        <v-simple-table v-if="tab == 2">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-left">
-                                                        S.No
-                                                    </th>
-                                                    <th class="text-left">
-                                                        {{
-                                                            filter.type == 1
-                                                                ? "Year"
-                                                                : "Month \ Year"
-                                                        }}
-                                                    </th>
-                                                    <th class="text-left">
-                                                        Sales
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr
-                                                    v-for="(
-                                                        item, index
-                                                    ) in data"
-                                                    :key="index"
-                                                >
-                                                    <td>{{ index + 1 }}</td>
-                                                    <td>
-                                                        {{
-                                                            filter.type == 1
-                                                                ? item.lYear
-                                                                : formatDate(
-                                                                      item.lMonth +
-                                                                          "/01/" +
-                                                                          item.lYear,
-                                                                      "MMMM/YYYY"
-                                                                  )
-                                                        }}
-                                                    </td>
-                                                    <td>
-                                                        {{
-                                                            currency(
-                                                                item.totalItemPrice
-                                                            )
-                                                        }}
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </v-simple-table>
-                                    </v-card-text>
                                 </v-card>
                             </v-tab-item>
                         </v-tabs-items>
                     </v-card>
+                </v-col>
+                <v-col cols="12">
+                    <div class="text-center blue--text" v-if="tab == 0">
+                        Report from
+                        {{ formatDate(filter.from, "MM/DD/YYYY") }}
+                        to
+                        {{ formatDate(filter.to, "MM/DD/YYYY") }}
+                    </div>
+                    <div class="text-center blue--text" v-if="tab == 1">
+                        Order Count Report from
+                        {{ formatDate(filter.from, "MM/DD/YYYY") }}
+                        to
+                        {{ formatDate(filter.to, "MM/DD/YYYY") }}
+                    </div>
+                    <div class="text-center blue--text" v-if="tab == 2">
+                        Sales Report from
+
+                        {{
+                            filter.type == 1
+                                ? formatDate(filter.from, "YYYY")
+                                : formatDate(filter.from, "MM/YYYY")
+                        }}
+                        to
+                        {{
+                            filter.type == 1
+                                ? formatDate(filter.to, "YYYY")
+                                : formatDate(filter.to, "MM/YYYY")
+                        }}
+                    </div>
+                    <v-card elevation="0" v-if="tab == 0">
+                        <v-data-table
+                            height="300"
+                            fixed-header
+                            :headers="headers"
+                            :items="data"
+                            class="transparent"
+                            v-context-menu="ctx"
+                        >
+                            <template v-slot:item.order_time="{ item }">
+                                {{ formatDate(item.order_time) }}
+                            </template>
+                        </v-data-table>
+                    </v-card>
+                    <v-simple-table v-if="tab == 1">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Date</th>
+                                <th class="text-left">Total Orders</th>
+                                <th class="text-left">
+                                    Total Orders Not Confirmed
+                                </th>
+                                <th class="text-left">
+                                    Total Orders Confirmed
+                                </th>
+                                <th class="text-left">
+                                    Total Orders Cancelled
+                                </th>
+                                <th class="text-left">
+                                    Total Orders Being Prepared
+                                </th>
+                                <th class="text-left">Total Orders Pickup</th>
+                                <th class="text-left">
+                                    Total Orders Delivered
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in data" :key="index">
+                                <td>
+                                    {{
+                                        formatDate(
+                                            item.lMonth + "/01/" + item.lYear,
+                                            "MMMM YYYY"
+                                        )
+                                    }}
+                                </td>
+                                <td>
+                                    {{ item.totalOrder }}
+                                </td>
+                                <td>
+                                    {{ item.totalUnconfirmedOrder }}
+                                </td>
+                                <td>
+                                    {{ item.totalConfirmedOrder }}
+                                </td>
+                                <td>
+                                    {{ item.totalBeingPreparedOrder }}
+                                </td>
+                                <td>
+                                    {{ item.totalPickupOrder }}
+                                </td>
+                                <td>
+                                    {{ item.totalDeliveredOrder }}
+                                </td>
+                                <td>
+                                    {{ item.totalCancelledOrder }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td
+                                    style="border-top: solid black 1px"
+                                    class="font-weight-bold"
+                                >
+                                    TOTAL
+                                </td>
+                                <td style="border-top: solid black 1px">
+                                    {{ getTotal(data, "totalOrder") }}
+                                </td>
+                                <td style="border-top: solid black 1px">
+                                    {{
+                                        getTotal(data, "totalUnconfirmedOrder")
+                                    }}
+                                </td>
+                                <td style="border-top: solid black 1px">
+                                    {{ getTotal(data, "totalConfirmedOrder") }}
+                                </td>
+                                <td style="border-top: solid black 1px">
+                                    {{
+                                        getTotal(
+                                            data,
+                                            "totalBeingPreparedOrder"
+                                        )
+                                    }}
+                                </td>
+                                <td style="border-top: solid black 1px">
+                                    {{ getTotal(data, "totalPickupOrder") }}
+                                </td>
+                                <td style="border-top: solid black 1px">
+                                    {{ getTotal(data, "totalDeliveredOrder") }}
+                                </td>
+                                <td style="border-top: solid black 1px">
+                                    {{ getTotal(data, "totalCancelledOrder") }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </v-simple-table>
+                    <v-simple-table v-if="tab == 2">
+                        <thead>
+                            <tr>
+                                <th class="text-left">S.No</th>
+                                <th class="text-left">
+                                    {{
+                                        filter.type == 1
+                                            ? "Year"
+                                            : "Month / Year"
+                                    }}
+                                </th>
+                                <th class="text-left">Sales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in data" :key="index">
+                                <td>{{ index + 1 }}</td>
+                                <td>
+                                    {{
+                                        filter.type == 1
+                                            ? item.lYear
+                                            : formatDate(
+                                                  item.lMonth +
+                                                      "/01/" +
+                                                      item.lYear,
+                                                  "MMMM YYYY"
+                                              )
+                                    }}
+                                </td>
+                                <td>
+                                    {{ currency(item.totalItemPrice) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td
+                                    style="border-top: solid black 1px"
+                                    class="font-weight-bold"
+                                    colspan="2"
+                                >
+                                    TOTAL
+                                </td>
+                                <td
+                                    style="border-top: solid black 1px"
+                                    class="font-weight-bold"
+                                >
+                                    {{ getTotal(data, "totalItemPrice") }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </v-simple-table>
                 </v-col>
             </v-row>
         </v-container>

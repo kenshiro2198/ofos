@@ -28,6 +28,37 @@
                         </v-card-text>
                     </v-card>
                 </v-col>
+                <!-- <v-col cols="12">
+                    <template>
+                        <v-card class="mx-auto text-center" color="green" dark>
+                            <v-card-text>
+                                <v-sheet color="rgba(0, 0, 0, .12)">
+                                    <v-sparkline
+                                        :value="value"
+                                        color="rgba(255, 255, 255, .7)"
+                                        height="100"
+                                        line-width="2"
+                                        padding="24"
+                                        stroke-linecap="round"
+                                        smooth
+                                    >
+                                        <template v-slot:label="item">
+                                            {{ currency(item.value) }}
+                                        </template>
+                                    </v-sparkline>
+                                </v-sheet>
+                            </v-card-text>
+
+                            <v-card-text>
+                                <div class="text-h4 font-weight-thin">
+                                    Sales
+                                </div>
+                            </v-card-text>
+
+                            <v-divider></v-divider>
+                        </v-card>
+                    </template>
+                </v-col> -->
             </v-row>
         </v-container>
     </section>
@@ -47,6 +78,7 @@ export default {
         let vm = this;
         return {
             items: [],
+            value: [],
             buttons: [
                 {
                     icon: "refresh",
@@ -66,6 +98,7 @@ export default {
     created() {
         let vm = this;
         vm.getItems();
+        vm.orderSales();
     },
     methods: {
         async getItems() {
@@ -75,6 +108,18 @@ export default {
             vm.items = data.data || data;
             vm.totalItems = data.total || data.length;
             vm.$busy();
+        },
+        async orderSales() {
+            let vm = this;
+            var d = new Date();
+            const { data } = await axios.get("/orders/sales", {
+                params: {
+                    from: d.getFullYear() + "-" + "01-01",
+                    to: d.getFullYear() + "-12-31",
+                    type: 0,
+                },
+            });
+            vm.value = data;
         },
     },
     watch: {
