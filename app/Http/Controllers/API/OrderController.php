@@ -73,7 +73,7 @@ class OrderController extends APIBaseController
             } else {
                 $data = json_decode($response, true);
                 $data = $data['data'];
-                $data = $data->checkouturl;
+                // $data = $data->checkouturl;
                 return $data;
             }
 
