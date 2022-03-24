@@ -43,6 +43,11 @@
                                                     deletable-chips
                                                     multiple
                                                     hide-details
+                                                    clearable
+                                                    @click.clear="
+                                                        betweenDates()
+                                                    "
+                                                    @change="betweenDates()"
                                                 ></v-autocomplete>
                                             </v-col>
                                             <v-col v-if="tab == 2">
@@ -57,6 +62,76 @@
                                             </v-col>
                                         </v-row>
                                     </v-card-text>
+                                    <v-card-title>
+                                        <div
+                                            class="text-center"
+                                            v-if="tab == 0"
+                                        >
+                                            Report from
+                                            {{
+                                                formatDate(
+                                                    filter.from,
+                                                    "MM/DD/YYYY"
+                                                )
+                                            }}
+                                            to
+                                            {{
+                                                formatDate(
+                                                    filter.to,
+                                                    "MM/DD/YYYY"
+                                                )
+                                            }}
+                                        </div>
+                                        <div
+                                            class="text-center"
+                                            v-if="tab == 1"
+                                        >
+                                            Order Count Report from
+                                            {{
+                                                formatDate(
+                                                    filter.from,
+                                                    "MM/DD/YYYY"
+                                                )
+                                            }}
+                                            to
+                                            {{
+                                                formatDate(
+                                                    filter.to,
+                                                    "MM/DD/YYYY"
+                                                )
+                                            }}
+                                        </div>
+                                        <div
+                                            class="text-center"
+                                            v-if="tab == 2"
+                                        >
+                                            Sales Report from
+
+                                            {{
+                                                filter.type == 1
+                                                    ? formatDate(
+                                                          filter.from,
+                                                          "YYYY"
+                                                      )
+                                                    : formatDate(
+                                                          filter.from,
+                                                          "MM/YYYY"
+                                                      )
+                                            }}
+                                            to
+                                            {{
+                                                filter.type == 1
+                                                    ? formatDate(
+                                                          filter.to,
+                                                          "YYYY"
+                                                      )
+                                                    : formatDate(
+                                                          filter.to,
+                                                          "MM/YYYY"
+                                                      )
+                                            }}
+                                        </div>
+                                    </v-card-title>
                                     <v-card-text>
                                         <v-data-table
                                             v-if="tab == 0"
@@ -423,6 +498,24 @@ export default {
         "filter.type"(value) {
             let vm = this;
             if (vm.tab == 2) {
+                vm.orderSales();
+            }
+        },
+        "filter.from"(value) {
+            if (vm.tab == 0) {
+                vm.betweenDates();
+            } else if (vm.tab == 1) {
+                vm.orderCount();
+            } else if (vm.tab == 2) {
+                vm.orderSales();
+            }
+        },
+        "filter.to"(value) {
+            if (vm.tab == 0) {
+                vm.betweenDates();
+            } else if (vm.tab == 1) {
+                vm.orderCount();
+            } else if (vm.tab == 2) {
                 vm.orderSales();
             }
         },

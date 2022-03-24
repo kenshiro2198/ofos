@@ -4,18 +4,16 @@
         <v-container fluid grid-list-lg>
             <v-row>
                 <v-col>
-                    <v-btn-toggle v-model="status" mandatory>
-                        <v-btn> All </v-btn>
-                        <v-btn> For Confirmation </v-btn>
-
-                        <v-btn> Confirmed </v-btn>
-
-                        <v-btn> Preparation </v-btn>
-
-                        <v-btn> Pickup </v-btn>
-                        <v-btn> Delivered </v-btn>
-                        <v-btn> Cancelled </v-btn>
-                    </v-btn-toggle>
+                    <v-autocomplete
+                        label="Status"
+                        :items="status"
+                        v-model="filter.status"
+                        solo
+                        clearable
+                        hide-details
+                        @click.clear="initialize()"
+                        @change="initialize()"
+                    ></v-autocomplete>
                 </v-col>
             </v-row>
             <v-row>
@@ -54,6 +52,7 @@ export default {
             options: {
                 type: 1,
             },
+            filter: {},
             ctx: [
                 {
                     text: "View Details",
@@ -74,6 +73,32 @@ export default {
                 },
             ],
             search: null,
+            status: [
+                {
+                    text: "Not Confirmed Order",
+                    value: "1",
+                },
+                {
+                    text: "Order Confirmed",
+                    value: "2",
+                },
+                {
+                    text: "Food Being Prepared",
+                    value: "3",
+                },
+                {
+                    text: "Food Pickup",
+                    value: "4",
+                },
+                {
+                    text: "Food Delivered",
+                    value: "5",
+                },
+                {
+                    text: "Cancelled",
+                    value: "6",
+                },
+            ],
             headers: [
                 {
                     text: "S.No",
@@ -98,26 +123,20 @@ export default {
             data: [],
         };
     },
-    watch: {
-        async status(value) {
-            let vm = this;
-            if (value != 0) {
-                const { data } = await axios.get("/orders?status=" + value);
-                vm.data = data;
-            } else {
-                const { data } = await axios.get("/orders");
-                vm.data = data;
-            }
-
-            /* vm.setItem(this.$store.state.order, data); */
-        },
-    },
     async created() {
         let vm = this;
-        const { data } = await axios.get("/orders");
-        vm.data = data;
+        vm.initialize();
     },
     methods: {
+        async initialize() {
+            let vm = this;
+            const { data } = await axios.get("/orders", {
+                params: {
+                    status: vm.filter.status,
+                },
+            });
+            vm.data = data;
+        },
         async delete(item) {
             let vm = this;
             const confirmed = await vm.$confirm(this.spiel.confirm, {
