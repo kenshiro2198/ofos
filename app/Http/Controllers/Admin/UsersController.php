@@ -35,6 +35,7 @@ class UsersController extends Controller
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->email = $request->email;
+        $user->username = $request->username;
         $user->password = bcrypt($request->password);
         $user->type = $request->type;
         $user->save();
@@ -75,6 +76,7 @@ class UsersController extends Controller
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->email = $request->email;
+        $user->username = $request->username;
         if (isset($request->password)) {
             $user->password = bcrypt($request->password);
         }

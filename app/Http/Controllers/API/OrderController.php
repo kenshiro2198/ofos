@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class RegisterController extends APIBaseController
+class OrderController extends APIBaseController
 {
     public function order(Request $request)
     {
