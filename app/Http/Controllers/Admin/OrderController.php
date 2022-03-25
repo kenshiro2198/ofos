@@ -170,4 +170,13 @@ class OrderController extends Controller
         }
     }
 
+    public function updateStatus(Request $request)
+    {
+        $query = new OrderTracker();
+        $query->order_id = $request->order_id;
+        $query->remark = $request->remark;
+        $query->status = $request->status;
+        $query->save();
+    }
+
 }

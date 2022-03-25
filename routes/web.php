@@ -15,6 +15,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'web'], function () {
     Route::get('/is-unique', 'Admin\UsersController@unique');
     Route::get('/orders/count', 'Admin\OrderController@orderCount');
     Route::get('/orders/sales', 'Admin\OrderController@salesReport');
+    Route::post('/orders/track', 'Admin\OrderController@updateStatus');
     Route::apiResources([
         'categories' => 'Admin\CategoryController',
         'items' => 'Admin\ItemController',
