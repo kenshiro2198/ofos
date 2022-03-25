@@ -59,6 +59,7 @@ class OrderController extends APIBaseController
                     'customername' => $user->fullname,
                     'customermobile' => $user->number,
                     'customeremail' => $user->email,
+                    'merchantlogourl' => "http://admin.gdistrictofficial.com/img/logo_transport.png",
                     'webhooksuccessurl' => "http://admin.gdistrictofficial.com/api/payment/success/$orderNo",
                     'webhookfailurl' => "http://admin.gdistrictofficial.com/api/payment/fail/$orderNo",
                 ),
