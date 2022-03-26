@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Item;
 use Illuminate\Http\Request;
 
@@ -33,7 +34,9 @@ class ItemController extends Controller
     {
         $query = new Item();
         $query->name = $request->name;
+        $category = Category::find($request->category);
         $query->category_id = $request->category;
+        $query->category_name = $category->name;
         if (!empty($request->image) && $this->isBase64($request->image)) {
             $query->image = $this->uploadImage($request->image, 'images', $request->name);
         } else {
@@ -66,7 +69,9 @@ class ItemController extends Controller
     public function update(Request $request, Item $item)
     {
         $item->name = $request->name;
-        $item->category_id = $request->category;
+        $category = Category::find($request->category);
+        $query->category_id = $request->category;
+        $query->category_name = $category->name;
         if (!empty($request->image) && $this->isBase64($request->image)) {
             $item->image = $this->uploadImage($request->image, 'images', $item->id, $request->name);
         }
