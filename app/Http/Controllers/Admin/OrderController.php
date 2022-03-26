@@ -60,7 +60,7 @@ class OrderController extends Controller
     public function show($id)
     {
         $oa = OrderAddress::where("order_number", $id)->first();
-        $user = User::find($oa->id);
+        $user = User::find($oa->user_id);
         $order = Order::where("number", $id)->with('item')->get();
         $ot = OrderTracker::where("order_id", $id)->get();
         return [
